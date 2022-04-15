@@ -124,6 +124,7 @@ class sideBarNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    var datetime = DateTime.now();
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
@@ -136,15 +137,127 @@ class sideBarNavigator extends StatelessWidget {
           case 0:
             return Scaffold(
 
-              appBar: AppBar(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                title: Text('Home'),
-                backgroundColor: canvasColor,
-              ),
               body: Container(
                 color: scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: canvasColor,
+                        shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                children: [
+                                  // Text(
+                                  //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                                  //   style: TextStyle(
+                                  //       color: Colors.white,
+                                  //       fontSize: 20
+                                  //   ),
+                                  // ),
+
+                                  Text('   Home',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30
+                                  ),),
+                                  Text(
+                                    '   Time - ${datetime.hour}:${datetime.minute}    ',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20
+                                    ),
+                                  ),
+                                ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Card(
+                                color: canvasColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Container(
+                                  height: 250,
+                                  width: 400,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'People In : ',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '80',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 50,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                elevation: 5,
+                              ),
+                              Card(
+                                color: canvasColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Container(
+                                  height: 250,
+                                  width: 400,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text(
+                                        'Total Visited : ',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '80',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 50,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                elevation: 5,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           case 1:
