@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:iot_dashboard/constants.dart';
+import 'dart:async';
+import 'constants.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   MainApp({Key? key}) : super(key: key);
 
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
   final _controller = SidebarXController(selectedIndex: 0);
 
   @override
@@ -113,7 +122,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class sideBarNavigator extends StatelessWidget {
+class sideBarNavigator extends StatefulWidget {
   const sideBarNavigator({
     Key? key,
     required this.controller,
@@ -122,13 +131,44 @@ class sideBarNavigator extends StatelessWidget {
   final SidebarXController controller;
 
   @override
+  State<sideBarNavigator> createState() => _sideBarNavigatorState();
+}
+
+class _sideBarNavigatorState extends State<sideBarNavigator> {
+  late String _timeString;
+  List<_TodayInCustomerData> data = [
+    _TodayInCustomerData('00:00', 35),
+    _TodayInCustomerData('1:00', 28),
+    _TodayInCustomerData('2:00', 34),
+    _TodayInCustomerData('3:00', 32),
+    _TodayInCustomerData('4:00', 40)
+  ];
+  @override
+  void initState() {
+    _timeString =
+        "${DateTime.now().hour} : ${DateTime.now().minute} :${DateTime.now().second}";
+    Timer.periodic(Duration(seconds: 1), (Timer t) => _getCurrentTime());
+    super.initState();
+  }
+
+  void _getCurrentTime() {
+    setState(() {
+      if (DateTime.now().minute == 0) {
+        data.add(_TodayInCustomerData(
+            "${DateTime.now().hour} : ${DateTime.now().minute}", 35));
+      }
+      _timeString =
+          "${DateTime.now().hour} : ${DateTime.now().minute} :${DateTime.now().second}";
+    });
+  }
+
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     var datetime = DateTime.now();
     return AnimatedBuilder(
-      animation: controller,
+      animation: widget.controller,
       builder: (context, child) {
-        switch (controller.selectedIndex) {
+        switch (widget.controller.selectedIndex) {
           // case 0:
           //   return Text(
           //     'Home',
@@ -136,7 +176,6 @@ class sideBarNavigator extends StatelessWidget {
           //   );
           case 0:
             return Scaffold(
-
               body: Container(
                 color: scaffoldBackgroundColor,
                 child: Column(
@@ -146,36 +185,33 @@ class sideBarNavigator extends StatelessWidget {
                       child: Card(
                         color: canvasColor,
                         shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Container(
                           width: double.infinity,
                           height: 50,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Text(
+                              //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 20
+                              //   ),
+                              // ),
 
-                                children: [
-                                  // Text(
-                                  //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
-                                  //   style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontSize: 20
-                                  //   ),
-                                  // ),
-
-                                  Text('   Home',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 30
-                                  ),),
-                                  Text(
-                                    '   Time - ${datetime.hour}:${datetime.minute}    ',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                '   Home',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30),
+                              ),
+                              Text(
+                                '   ${_timeString}   ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -183,6 +219,7 @@ class sideBarNavigator extends StatelessWidget {
                     Expanded(
                       flex: 9,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,13 +227,13 @@ class sideBarNavigator extends StatelessWidget {
                               Card(
                                 color: canvasColor,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
-                                ),
+                                    borderRadius: BorderRadius.circular(20)),
                                 child: Container(
                                   height: 250,
                                   width: 400,
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -222,13 +259,13 @@ class sideBarNavigator extends StatelessWidget {
                               Card(
                                 color: canvasColor,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)
-                                ),
+                                    borderRadius: BorderRadius.circular(20)),
                                 child: Container(
                                   height: 250,
                                   width: 400,
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Text(
@@ -253,6 +290,43 @@ class sideBarNavigator extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              "Today's visitors : ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SfCartesianChart(
+                              primaryXAxis: CategoryAxis(),
+                              // Chart title
+                              // Enable legend
+                              legend: Legend(isVisible: true),
+                              // Enable tooltip
+                              tooltipBehavior: TooltipBehavior(enable: true),
+                              series: <
+                                  ChartSeries<_TodayInCustomerData, String>>[
+                                // SplineSeries(dataSource: data, xValueMapper: (_SalesData sales, _) => sales.year, yValueMapper: (_SalesData sales, _) => sales.sales,name: 'Sales',
+                                //     // Enable data label
+                                //     dataLabelSettings: DataLabelSettings(isVisible: true)),
+                                LineSeries<_TodayInCustomerData, String>(
+                                    color: Colors.white,
+                                    dataSource: data,
+                                    xValueMapper:
+                                        (_TodayInCustomerData data, _) =>
+                                            data.time,
+                                    yValueMapper:
+                                        (_TodayInCustomerData data, _) =>
+                                            data.count,
+                                    name: 'Count',
+                                    // Enable data label
+                                    dataLabelSettings:
+                                        DataLabelSettings(isVisible: true))
+                              ]),
                         ],
                       ),
                     )
@@ -299,3 +373,9 @@ ListView l = ListView.builder(
     ),
   ),
 );
+
+class _TodayInCustomerData {
+  _TodayInCustomerData(this.time, this.count);
+  final String time;
+  final double count;
+}

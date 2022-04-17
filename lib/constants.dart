@@ -8,3 +8,9 @@ const white = Colors.white;
 final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
 
 final divider = Divider(color: white.withOpacity(0.3), height: 1);
+
+class _TodayInCustomerData {
+  _TodayInCustomerData(this.time, this.count);
+  final String time;
+  final double count;
+}
