@@ -415,7 +415,6 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                               ListTile(
                                                 leading: Text('Pick Date : '),
                                                 title: Text('date'),
-                                                trailing: ,
                                               )
                                             ],
                                           ),),
