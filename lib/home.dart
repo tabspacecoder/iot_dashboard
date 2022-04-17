@@ -84,7 +84,8 @@ class _MainAppState extends State<MainApp> {
                   height: 100,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Image.asset('assets/analytics.png'),
+                    child: Image.asset('assets/logo.png'),
+                    // child: AssetImage('assets/logo.png'),
                   ),
                 );
               },
@@ -158,7 +159,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
             "${DateTime.now().hour} : ${DateTime.now().minute}", 35));
       }
       _timeString =
-          "${DateTime.now().hour} : ${DateTime.now().minute} :${DateTime.now().second}";
+          "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}";
     });
   }
 
@@ -335,19 +336,204 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
               ),
             );
           case 1:
-            return Text(
-              'Search',
-              style: theme.textTheme.headline5,
+            return Scaffold(
+              body: Container(
+                color: scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: canvasColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Text(
+                              //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 20
+                              //   ),
+                              // ),
+
+                              Text(
+                                '   Analytics',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30),
+                              ),
+                              Text(
+                                '   ${_timeString}   ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: DefaultTabController(
+                        length: 4,
+                        child: Scaffold(
+                            body: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(25.0)
+                                    ),
+                                    child:  TabBar(
+                                      indicator: BoxDecoration(
+                                          color: canvasColor,
+                                          borderRadius:  BorderRadius.circular(25.0)
+                                      ) ,
+                                      labelColor: Colors.white,
+                                      unselectedLabelColor: Colors.black,
+                                      tabs: const  [
+                                        Tab(text: 'Daily',),
+                                        Tab(text: 'Weekly',),
+                                        Tab(text: 'Monthly',),
+                                        Tab(text: 'Yearly',)
+                                      ],
+                                    ),
+                                  ),
+                                   Expanded(
+                                      child: TabBarView(
+                                        children:  [
+                                          Center(child: Column(
+                                            children: [
+                                              ListTile(
+                                                leading: Text('Pick Date : '),
+                                                title: Text('date'),
+                                                trailing: ,
+                                              )
+                                            ],
+                                          ),),
+                                          Center(child: Text("Weekly Pages"),),
+                                          Center(child: Text('Monthly Page'),),
+                                          Center(child: Text('Yearly Page'),)
+                                        ],
+                                      )
+                                  )
+                                ],
+                              ),
+                            )
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             );
           case 2:
-            return Text(
-              'People',
-              style: theme.textTheme.headline5,
+            return Scaffold(
+              body: Container(
+                color: scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: canvasColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Text(
+                              //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 20
+                              //   ),
+                              // ),
+
+                              Text(
+                                '   Regulars',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30),
+                              ),
+                              Text(
+                                '   ${_timeString}   ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Column(),
+                    )
+                  ],
+                ),
+              ),
             );
           case 3:
-            return Text(
-              'Favorites',
-              style: theme.textTheme.headline5,
+            return Scaffold(
+              body: Container(
+                color: scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: canvasColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Text(
+                              //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 20
+                              //   ),
+                              // ),
+
+                              Text(
+                                '   Intruders',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30),
+                              ),
+                              Text(
+                                '   ${_timeString}   ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Column(),
+                    )
+                  ],
+                ),
+              ),
             );
           default:
             return Text(

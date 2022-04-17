@@ -1,80 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:side_navigation/side_navigation.dart';
-
 void main() {
-  runApp(
-    MaterialApp(
-      theme: ThemeData.dark(),
-      themeMode: ThemeMode.dark,
-      home: const MainView(),
-    ),
-  );
+  runApp(const MyApp());
 }
-
-class MainView extends StatefulWidget {
-  const MainView({Key? key}) : super(key: key);
-
-  @override
-  _MainViewState createState() => _MainViewState();
-}
-
-class _MainViewState extends State<MainView> {
-  /// Views to display
-  List<Widget> views = const [
-    Center(
-      child: Text('Dashboard'),
-    ),
-    Center(
-      child: Text('Account'),
-    ),
-    Center(
-      child: Text('Settings'),
-    ),
-  ];
-
-  /// The currently selected index of the bar
-  int selectedIndex = 0;
-
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /// You can use an AppBar if you want to
-      //appBar: AppBar(
-      //  title: const Text('App'),
-      //),
-
-      // The row is needed to display the current view
-      body: Row(
-        children: [
-          /// Pretty similar to the BottomNavigationBar!
-          SideNavigationBar(
-            selectedIndex: selectedIndex,
-            items: const [
-              SideNavigationBarItem(
-                icon: Icons.dashboard,
-                label: 'Dashboard',
-              ),
-              SideNavigationBarItem(
-                icon: Icons.person,
-                label: 'Account',
-              ),
-              SideNavigationBarItem(
-                icon: Icons.settings,
-                label: 'Settings',
-              ),
-            ],
-            onTap: (index) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text("Flutter TabBar Example - Customized "),
           ),
-
-          /// Make it take the rest of the available width
-          Expanded(
-            child: views.elementAt(selectedIndex),
+          body: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 45,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(25.0)
+                  ),
+                  child:  TabBar(
+                    indicator: BoxDecoration(
+                        color: Colors.green[300],
+                        borderRadius:  BorderRadius.circular(25.0)
+                    ) ,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.black,
+                    tabs: const  [
+                      Tab(text: 'Chats',),
+                      Tab(text: 'Status',),
+                      Tab(text: 'Calls',),
+                      Tab(text: 'Settings',)
+                    ],
+                  ),
+                ),
+                const Expanded(
+                    child: TabBarView(
+                      children:  [
+                        Center(child: Text("Chats Pages"),),
+                        Center(child: Text("Status Pages"),),
+                        Center(child: Text('Calls Page'),),
+                        Center(child: Text('Settings Page'),)
+                      ],
+                    )
+                )
+              ],
+            ),
           )
-        ],
       ),
     );
   }
