@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 const primaryColor = Color(0xFF685BFF);
 const canvasColor = Color(0xFF2E2E48);
 const scaffoldBackgroundColor = Color(0xFF464667);
@@ -14,3 +14,20 @@ class _TodayInCustomerData {
   final String time;
   final double count;
 }
+
+
+
+
+ListView l = ListView.builder(
+  padding: const EdgeInsets.only(top: 10),
+  itemBuilder: (context, index) => Container(
+    height: 100,
+    width: double.infinity,
+    margin: const EdgeInsets.only(bottom: 10, right: 10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Theme.of(context).canvasColor,
+      boxShadow: const [BoxShadow()],
+    ),
+  ),
+);

@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:iot_dashboard/constants.dart';
 import 'dart:async';
 import 'constants.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:iot_dashboard/Networks.dart';
 
 class MainApp extends StatefulWidget {
   MainApp({Key? key}) : super(key: key);
@@ -15,7 +18,6 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   final _controller = SidebarXController(selectedIndex: 0);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -109,6 +111,10 @@ class _MainAppState extends State<MainApp> {
                   icon: Icons.warning_amber_outlined,
                   label: 'Intruders?',
                 ),
+                const SidebarXItem(
+                  icon: Icons.live_tv,
+                  label: 'Live',
+                ),
               ],
             ),
             Expanded(
@@ -136,6 +142,11 @@ class sideBarNavigator extends StatefulWidget {
 }
 
 class _sideBarNavigatorState extends State<sideBarNavigator> {
+
+
+
+
+
   late String _timeString;
   List<_TodayInCustomerData> data = [
     _TodayInCustomerData('00:00', 35),
@@ -162,8 +173,23 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
           "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}";
     });
   }
+  String? videoId = YoutubePlayer.convertUrlToId("http://youtube.com/channel/UCe9z1mihw-RBSV3RuXxO0lg/live");
+   YoutubePlayerController _ytcontroller = YoutubePlayerController(
+    initialVideoId: 'tLL_DoSldEk',
+    flags: const YoutubePlayerFlags(
+      isLive: true,
+      autoPlay: true,
+
+    ),
+  );
 
   Widget build(BuildContext context) {
+    void Fun(param){
+      var decoded = jsonDecode(param);
+      var data = decoded['Type'];
+      print(data);
+    }
+    communicate(packet(Request.All, ""), Fun);
     final theme = Theme.of(context);
     var datetime = DateTime.now();
     return AnimatedBuilder(
@@ -297,37 +323,44 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                               "Today's visitors : ",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 50,
+                                fontSize: 40,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          SfCartesianChart(
-                              primaryXAxis: CategoryAxis(),
-                              // Chart title
-                              // Enable legend
-                              legend: Legend(isVisible: true),
-                              // Enable tooltip
-                              tooltipBehavior: TooltipBehavior(enable: true),
-                              series: <
-                                  ChartSeries<_TodayInCustomerData, String>>[
-                                // SplineSeries(dataSource: data, xValueMapper: (_SalesData sales, _) => sales.year, yValueMapper: (_SalesData sales, _) => sales.sales,name: 'Sales',
-                                //     // Enable data label
-                                //     dataLabelSettings: DataLabelSettings(isVisible: true)),
-                                LineSeries<_TodayInCustomerData, String>(
-                                    color: Colors.white,
-                                    dataSource: data,
-                                    xValueMapper:
-                                        (_TodayInCustomerData data, _) =>
-                                            data.time,
-                                    yValueMapper:
-                                        (_TodayInCustomerData data, _) =>
-                                            data.count,
-                                    name: 'Count',
-                                    // Enable data label
-                                    dataLabelSettings:
+                          Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(),
+                                  // Chart title
+                                  // Enable legend
+                                  legend: Legend(isVisible: true),
+                                  // Enable tooltip
+                                  tooltipBehavior: TooltipBehavior(enable: true),
+                                  series: <
+                                      ChartSeries<_TodayInCustomerData, String>>[
+                                    // SplineSeries(dataSource: data, xValueMapper: (_SalesData sales, _) => sales.year, yValueMapper: (_SalesData sales, _) => sales.sales,name: 'Sales',
+                                    //     // Enable data label
+                                    //     dataLabelSettings: DataLabelSettings(isVisible: true)),
+                                    LineSeries<_TodayInCustomerData, String>(
+                                        color: canvasColor,
+                                        dataSource: data,
+                                        xValueMapper: (_TodayInCustomerData data, _) => data.time,
+                                        yValueMapper: (_TodayInCustomerData data, _) => data.count,
+                                        name: 'Count',
+                                        // Enable data label
+                                        dataLabelSettings:
                                         DataLabelSettings(isVisible: true))
-                              ]),
+                                  ]),
+                            ),
+                          )
+
                         ],
                       ),
                     )
@@ -380,7 +413,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                     Expanded(
                       flex: 9,
                       child: DefaultTabController(
-                        length: 4,
+                        length: 3,
                         child: Scaffold(
                             body: Padding(
                               padding: EdgeInsets.all(8.0),
@@ -401,7 +434,6 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                       unselectedLabelColor: Colors.black,
                                       tabs: const  [
                                         Tab(text: 'Daily',),
-                                        Tab(text: 'Weekly',),
                                         Tab(text: 'Monthly',),
                                         Tab(text: 'Yearly',)
                                       ],
@@ -412,13 +444,62 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                         children:  [
                                           Center(child: Column(
                                             children: [
-                                              ListTile(
-                                                leading: Text('Pick Date : '),
-                                                title: Text('date'),
-                                              )
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              Card(
+                                                color: Colors.white,
+                                                elevation: 3,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                child: ListTile(
+                                                  leading: Text('Pick Date : '),
+                                                  title: Text('date'),
+                                                  trailing: IconButton(
+                                                    icon: Icon(Icons.calendar_today),
+                                                    onPressed: (){},
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              Card(
+                                                color: Colors.white,
+                                                elevation: 3,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10)
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: SfCartesianChart(
+                                                      primaryXAxis: CategoryAxis(),
+                                                      // Chart title
+                                                      // Enable legend
+                                                      legend: Legend(isVisible: true),
+                                                      // Enable tooltip
+                                                      tooltipBehavior: TooltipBehavior(enable: true),
+                                                      series: <
+                                                          ChartSeries<_TodayInCustomerData, String>>[
+                                                        LineSeries<_TodayInCustomerData, String>(
+                                                            color: canvasColor,
+                                                            dataSource: data,
+                                                            xValueMapper:
+                                                                (_TodayInCustomerData data, _) =>
+                                                            data.time,
+                                                            yValueMapper:
+                                                                (_TodayInCustomerData data, _) =>
+                                                            data.count,
+                                                            name: 'Count',
+                                                            // Enable data label
+                                                            dataLabelSettings:
+                                                            DataLabelSettings(isVisible: true))
+                                                      ]),
+                                                ),
+                                              ),
                                             ],
                                           ),),
-                                          Center(child: Text("Weekly Pages"),),
                                           Center(child: Text('Monthly Page'),),
                                           Center(child: Text('Yearly Page'),)
                                         ],
@@ -534,6 +615,63 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                 ),
               ),
             );
+          case 4:
+            return Scaffold(
+              body: Container(
+                color: scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Card(
+                        color: canvasColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Text(
+                              //   '  Date : ${datetime.day}/${datetime.month}/${datetime.year}',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontSize: 20
+                              //   ),
+                              // ),
+
+                              Text(
+                                '   Live',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30),
+                              ),
+                              Text(
+                                '   ${_timeString}   ',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 3,
+                        child: YoutubePlayer(
+                          controller: _ytcontroller,
+                          liveUIColor: canvasColor,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
           default:
             return Text(
               'Not found page',
@@ -544,20 +682,6 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
     );
   }
 }
-
-ListView l = ListView.builder(
-  padding: const EdgeInsets.only(top: 10),
-  itemBuilder: (context, index) => Container(
-    height: 100,
-    width: double.infinity,
-    margin: const EdgeInsets.only(bottom: 10, right: 10),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      color: Theme.of(context).canvasColor,
-      boxShadow: const [BoxShadow()],
-    ),
-  ),
-);
 
 class _TodayInCustomerData {
   _TodayInCustomerData(this.time, this.count);
