@@ -310,7 +310,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'People In : ',
+                                        'Total Inside : ',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 50,
