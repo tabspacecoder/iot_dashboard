@@ -4,7 +4,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 const int WebPort = 13579;
 // const String ip = "127.0.0.1";
 
-const String ip = "192.168.111.40";
+const String ip = "192.168.60.40";
 class Header {
   static const String Split = "-||-";
   static const String Success = "Success";
@@ -14,8 +14,8 @@ class Header {
 class Request {
   static const String All = "All";
   static const String SetType = "SetType";
-  static const String Analytics = "Model1";
-  static const String Intruder = "Model2";
+  static const String Analytics = "Mode1";
+  static const String Intruder = "Mode2";
 }
 
 String packet(String ReqType, String Other) {
