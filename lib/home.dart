@@ -146,7 +146,8 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
 
  int _toggleIndex = 0;
 
-
+ var todaytotalvisited=0;
+ var totalinside=0;
 
   late String _timeString;
   List<_TodayInCustomerData> todaydata = [
@@ -173,6 +174,12 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
   }
   late String videoID;
   String url = 'http://youtube.com/channel/UCe9z1mihw-RBSV3RuXxO0lg/live';
+
+  void getInside(param){
+    var data = param['Type'];
+    totalinside=data['Inside'];
+    todaytotalvisited=data['Timely'];
+  }
  void Fun(param){
    // var decoded = jsonDecode(param);
    var data = param['Type'];
@@ -182,21 +189,26 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
    yearlydata = [];
    weeklydata = [];
    hourlydata = [];
+   // todaytotalvisited=0;
+   todaytotalvisited=data['Timely'];
+   totalinside=data['Inside'];
    setState(() {
-     for(var i in data['Daily']){
-       dailydata.add(_DayWiseCustomerData(i[0].toString(), i[1]));
+     // Map<String, dynamic> map;
+     // data['Daily'].fromJson(map);
+     for(var i in data['Daily'].keys){
+       dailydata.add(_DayWiseCustomerData(i, data['Daily'][i]));
      }
-     for(var i in data['Monthly']){
-       monthlydata.add(_MonthlyCustomerData(i[0].toString(), i[1]));
+     for(var i in data['Monthly'].keys){
+       monthlydata.add(_MonthlyCustomerData(i, data['Monthly'][i]));
      }
-     for(var i in data['Yearly']){
-       yearlydata.add(_YearlyCustomerData(i[0].toString(), i[1]));
+     for(var i in data['Yearly'].keys){
+       yearlydata.add(_YearlyCustomerData(i, data['Yearly'][i]));
      }
-     for(var i in data['Weekly']){
-       weeklydata.add(_WeeklyCustomerData(i[0].toString(), i[1]));
+     for(var i in data['Daily'].keys){
+       hourlydata.add(_HourlyCustomerData(i, data['Daily'][i]));
      }
-     for(var i in data['Hourly']){
-       hourlydata.add(_HourlyCustomerData(i[0].toString(), i[1]));
+     for(var i in data['Weekly'].keys){
+       weeklydata.add(_WeeklyCustomerData(i, data['Weekly'][i]));
      }
 
    });
@@ -205,13 +217,13 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
 
   void _getCurrentTime() {
     setState(() {
-      if (DateTime.now().minute == 0) {
-        communicate(packet(Request.All, ""), Fun);
-        todaydata.add(_TodayInCustomerData(
-            "${DateTime.now().hour} : ${DateTime.now().minute}", 35));
-      }
-      _timeString =
-          "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}";
+      // if (DateTime.now().minute == 0) {
+      //   communicate(packet(Request.All, ""), Fun);
+      //   todaydata.add(_TodayInCustomerData(
+      //       "${DateTime.now().hour} : ${DateTime.now().minute}", 35));
+      // }
+      _timeString = "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}";
+      communicate(packet(Request.All, ""), getInside);
     });
   }
   // String? videoId = YoutubePlayer.convertUrlToId("http://youtube.com/channel/UCe9z1mihw-RBSV3RuXxO0lg/live");
@@ -318,7 +330,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                         ),
                                       ),
                                       Text(
-                                        '80',
+                                        '$totalinside',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 50,
@@ -340,7 +352,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                    children: [
                                       Text(
                                         'Total Visited : ',
                                         style: TextStyle(
@@ -350,7 +362,7 @@ class _sideBarNavigatorState extends State<sideBarNavigator> {
                                         ),
                                       ),
                                       Text(
-                                        '80',
+                                        '$todaytotalvisited',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 50,
