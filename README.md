@@ -1,5 +1,5 @@
 
-# Smart Video Analytics
+# Smart Customer Analytics
 This is the Frontend for the project made with Flutter.
 
 ## <a href="https://github.com/tabspacecoder/BackendIoT">Backend</a>
